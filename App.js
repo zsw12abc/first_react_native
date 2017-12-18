@@ -28,18 +28,22 @@ class App extends Component<{}> {
 
 	placeAddedHandler = (placeName) => {
 		this.props.onAddPlace(placeName);
+		console.log('[AddPlace] ' + placeName);
 	};
 
 	placeDeletedHandler = () => {
 		this.props.onDeletePlace();
+		console.log('[DeletePlace]');
 	};
 
 	placeSelectedHandler = (key) => {
 		this.props.onSelectPlace(key);
+		console.log('[SelectPlace] ' + key);
 	};
 
 	placeDeSelectedHandler = () => {
 		this.props.onDeSelectPlace();
+		console.log('[DeSelectPlace]');
 	};
 
 	render() {
