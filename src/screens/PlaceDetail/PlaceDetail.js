@@ -15,7 +15,7 @@ class PlaceDetail extends Component {
 			//onRequestClose is used for android
 			<View style={styles.container}>
 				<View>
-					<Image source={this.props.selectedPlace.image} style={styles.placeImage}/>
+					<Image source={this.props.selectedPlace.image} style={styles.placeImage}/>l
 					<Text style={styles.placeName}>{this.props.selectedPlace.name}</Text>
 				</View>
 				<View>
