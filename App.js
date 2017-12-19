@@ -5,6 +5,7 @@ import AuthScreen from "./src/screens/Auth/Auth";
 import SharePlaceScreen from "./src/screens/SharePlace/SharePlace";
 import FindPlaceScreen from "./src/screens/FindPlace/FindPlace";
 import configureStore from "./src/store/configureStore";
+import PlaceDetailScreen from './src/screens/PlaceDetail/PlaceDetail';
 
 
 const store = configureStore();
@@ -27,6 +28,10 @@ Navigation.registerComponent(
 	() => FindPlaceScreen,
 	store,
 	Provider
+);
+Navigation.registerComponent(
+	'awesome-places.PlaceDetailScreen',
+	() => PlaceDetailScreen,
 );
 
 //Start App
