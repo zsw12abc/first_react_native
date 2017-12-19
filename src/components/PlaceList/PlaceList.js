@@ -1,6 +1,6 @@
 import React from 'react';
 import {FlatList, StyleSheet} from 'react-native';
-import ListItem from '../ListItem/ListItem'
+import ListItem from '../ListItem/ListItem';
 
 
 const PlaceList = (props) => {
