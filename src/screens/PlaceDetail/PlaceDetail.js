@@ -28,7 +28,7 @@ class PlaceDetail extends Component {
 			</View>
 		);
 	}
-};
+}
 
 const styles = StyleSheet.create({
 	container: {

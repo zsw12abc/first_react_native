@@ -5,7 +5,7 @@ import {Dimensions, StyleSheet, Text, View} from 'react-native';
 class SideDrawer extends Component {
 	render() {
 		return (
-			<View style={[styles.container, {width: Dimensions.get('window').width * 0.8}]}>
+			<View style={styles.container}>
 				<Text>SideDrawer</Text>
 			</View>
 		);
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 		paddingTop: 22,
 		backgroundColor: 'white',
 		flex: 1,
-
+		width: Dimensions.get('window').width * 0.8
 	}
 });
 
