@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
 import startMainTabs from '../MainTabs/startMainTabs';
 import DefaultInput from '../../components/UI/DefaultInput/DefaultInput';
+import HeadingText from '../../components/UI/HeadingText/HeadingText'
 
 class AuthScreen extends Component {
 	loginHandler = () => {
@@ -11,15 +12,15 @@ class AuthScreen extends Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<Text>Please Log In</Text>
+				<HeadingText>Please Log In</HeadingText>
 				<Button title={"Switch to Login"}/>
 				<View style={styles.inputContainer}>
 					<DefaultInput style={styles.input}
-						placeholder={"Your Email Address"}/>
+					              placeholder={"Your Email Address"}/>
 					<DefaultInput style={styles.input}
-						placeholder={"Password"}/>
+					              placeholder={"Password"}/>
 					<DefaultInput style={styles.input}
-						placeholder={"Confirm Password"}/>
+					              placeholder={"Confirm Password"}/>
 				</View>
 				<Button title={"Submit"} onPress={this.loginHandler}/>
 			</View>
