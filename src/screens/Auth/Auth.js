@@ -14,11 +14,11 @@ class AuthScreen extends Component {
 				<Text>Please Log In</Text>
 				<Button title={"Switch to Login"}/>
 				<View style={styles.inputContainer}>
-					<DefaultInput
+					<DefaultInput style={styles.input}
 						placeholder={"Your Email Address"}/>
-					<DefaultInput
+					<DefaultInput style={styles.input}
 						placeholder={"Password"}/>
-					<DefaultInput
+					<DefaultInput style={styles.input}
 						placeholder={"Confirm Password"}/>
 				</View>
 				<Button title={"Submit"} onPress={this.loginHandler}/>
@@ -32,6 +32,13 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center'
+	},
+	inputContainer: {
+		width: '80%'
+	},
+	input: {
+		backgroundColor: '#eee',
+		borderColor: '#bbb'
 	}
 });
 export default AuthScreen;
