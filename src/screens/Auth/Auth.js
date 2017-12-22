@@ -19,13 +19,13 @@ class AuthScreen extends Component {
 	}
 
 
-	componentWillUnmount(dims) {
+	componentWillUnmount() {
 		Dimensions.removeEventListener('change', this.updateStyles);
 	}
 
-	updateStyles = (dims) => {
+	updateStyles = () => {
 		this.setState({
-			viewMode: dims.get('window').height > 500 ? 'portrait' : 'landscape'
+			isPortrait: Dimensions.get('window').height > 500 ? 'portrait' : 'landscape'
 		});
 	};
 
@@ -36,7 +36,7 @@ class AuthScreen extends Component {
 
 	render() {
 		let headingText = null;
-		if (this.state.viewMode === 'portrait') {
+		if (this.state.isPortrait === 'portrait') {
 			headingText = (
 				<MainText>
 					<HeadingText>Please Log In</HeadingText>
@@ -55,14 +55,14 @@ class AuthScreen extends Component {
 					<View style={styles.inputContainer}>
 						<DefaultInput style={styles.input}
 						              placeholder={"Your Email Address"}/>
-						<View style={this.state.viewMode === 'portrait' ?
+						<View style={this.state.isPortrait === 'portrait' ?
 							styles.portraitPasswordContainer : styles.landscapePasswordContainer}>
-							<View style={this.state.viewMode === 'portrait' ?
+							<View style={this.state.isPortrait === 'portrait' ?
 								styles.portraitPasswordWrapper : styles.landscapePasswordWrapper}>
 								<DefaultInput style={styles.input}
 								              placeholder={"Password"}/>
 							</View>
-							<View style={this.state.viewMode === 'portrait' ?
+							<View style={this.state.isPortrait === 'portrait' ?
 								styles.portraitPasswordWrapper : styles.landscapePasswordWrapper}>
 								<DefaultInput style={styles.input}
 								              placeholder={"Confirm Password"}/>
