@@ -34,7 +34,8 @@ class PlaceDetail extends Component {
 	render() {
 		return (
 			//onRequestClose is used for android
-			<View style={this.state.isPortrait ? styles.portraitContainer : styles.landscapeContainer}>
+			<View
+				style={[styles.container, this.state.isPortrait ? styles.portraitContainer : styles.landscapeContainer]}>
 				<View style={styles.subContainer}>
 					<Image
 						source={this.props.selectedPlace.image}
