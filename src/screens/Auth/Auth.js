@@ -9,7 +9,7 @@ import backgroundImage from '../../assets/background.jpg';
 
 class AuthScreen extends Component {
 	state = {
-		viewMode: Dimensions.get('window').height > 500 ? 'portrait' : 'landscape'
+		isPortrait: Dimensions.get('window').height > 500 ? 'portrait' : 'landscape'
 	};
 
 	constructor(props) {
