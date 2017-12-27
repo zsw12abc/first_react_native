@@ -143,7 +143,8 @@ class AuthScreen extends Component {
 						value={this.state.controls.confirmPassword.value}
 						valid={this.state.controls.confirmPassword.valid}
 						touched={this.state.controls.confirmPassword.touched}
-						onChangeText={(val) => this.updateInputState('confirmPassword', val)}/>
+						onChangeText={(val) => this.updateInputState('confirmPassword', val)}
+						secureTextEntry/>
 				</View>);
 		}
 		return (
@@ -162,7 +163,10 @@ class AuthScreen extends Component {
 							onChangeText={(val) => this.updateInputState('email', val)}
 							valid={this.state.controls.email.valid}
 							touched={this.state.controls.email.touched}
-							placeholder={"Your Email Address"}/>
+							placeholder={"Your Email Address"}
+							autoCapitalize={'none'}
+							autoCorrect={false}
+							keyboardType={'email-address'}/>
 						<View style={this.state.isPortrait === 'portrait' || this.state.authMode === 'login' ?
 							styles.portraitPasswordContainer : styles.landscapePasswordContainer}>
 							<View style={this.state.isPortrait === 'portrait' || this.state.authMode === 'login' ?
@@ -173,7 +177,8 @@ class AuthScreen extends Component {
 									value={this.state.controls.password.value}
 									valid={this.state.controls.password.valid}
 									touched={this.state.controls.password.touched}
-									onChangeText={(val) => this.updateInputState('password', val)}/>
+									onChangeText={(val) => this.updateInputState('password', val)}
+									secureTextEntry/>
 							</View>
 							{confirmPasswordControl}
 						</View>
