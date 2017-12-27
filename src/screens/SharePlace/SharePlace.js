@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, ScrollView, StyleSheet, View} from 'react-native';
+import {Button, KeyboardAvoidingView, ScrollView, StyleSheet, View} from 'react-native';
 import {connect} from 'react-redux';
 import {addPlace} from "../../store/actions/index";
 import PlaceInput from '../../components/PlaceInput/PlaceInput';
@@ -8,7 +8,6 @@ import PickLocation from '../../components/PickLocation/PickLocation';
 import MainText from '../../components/UI/MainText/MainText';
 import HeadingText from '../../components/UI/HeadingText/HeadingText';
 import validation from '../../utility/validation';
-
 
 class SharePlaceScreen extends Component {
 	static navigatorStyle = {
@@ -68,7 +67,7 @@ class SharePlaceScreen extends Component {
 	render() {
 		return (
 			<ScrollView>
-				<View style={styles.container}>
+				<KeyboardAvoidingView behavior={'padding'} style={styles.container}>
 					<MainText>
 						<HeadingText>Share a place with us!</HeadingText>
 					</MainText>
@@ -83,7 +82,7 @@ class SharePlaceScreen extends Component {
 							onPress={this.placeAddedHandler}
 							disabled={!this.state.controls.placeName.valid}/>
 					</View>
-				</View>
+				</KeyboardAvoidingView>
 			</ScrollView>
 		);
 	}
