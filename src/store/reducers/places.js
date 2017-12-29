@@ -15,7 +15,7 @@ const reducer = (state = initialState, action) => {
 					key: Math.random(),
 					name: action.placeName,
 					image: {
-						uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png',
+						uri: action.image.uri,
 					},
 					location: action.location
 				}),
