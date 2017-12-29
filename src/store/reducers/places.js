@@ -16,7 +16,8 @@ const reducer = (state = initialState, action) => {
 					name: action.placeName,
 					image: {
 						uri: 'https://facebook.github.io/react-native/docs/assets/favicon.png',
-					}
+					},
+					location: action.location
 				}),
 			};
 		case DELETE_PLACE:
