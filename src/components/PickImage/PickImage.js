@@ -19,7 +19,8 @@ class PickImage extends Component {
 					pickedImage: {uri: res.uri}
 				});
 				this.props.onImagePicked({
-					uri: res.uri
+					uri: res.uri,
+					base64: res.data,// transform the image to base64 string in order to store in the server
 				})
 			}
 		})
