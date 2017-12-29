@@ -3,10 +3,20 @@ import {connect} from 'react-redux';
 import {Dimensions, Image, Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {deletePlace} from "../../store/actions/index";
+import MapView from 'react-native-maps';
 
 class PlaceDetail extends Component {
 	state = {
 		isPortrait: Dimensions.get('window').height > 500,
+	};
+	updateStyles = () => {
+		this.setState({
+			isPortrait: Dimensions.get('window').height > 500
+		});
+	};
+	placeDeletedHandler = () => {
+		this.props.onDeletePlace(this.props.selectedPlace.key);
+		this.props.navigator.pop({});
 	};
 
 	constructor(props) {
@@ -14,32 +24,30 @@ class PlaceDetail extends Component {
 		Dimensions.addEventListener('change', this.updateStyles);
 	}
 
-
 	componentWillUnmount() {
 		Dimensions.removeEventListener('change', this.updateStyles);
 	}
-
-	updateStyles = () => {
-		this.setState({
-			isPortrait: Dimensions.get('window').height > 500
-		});
-	};
-
-
-	placeDeletedHandler = () => {
-		this.props.onDeletePlace(this.props.selectedPlace.key);
-		this.props.navigator.pop({});
-	};
 
 	render() {
 		return (
 			//onRequestClose is used for android
 			<View
 				style={[styles.container, this.state.isPortrait ? styles.portraitContainer : styles.landscapeContainer]}>
-				<View style={styles.subContainer}>
-					<Image
-						source={this.props.selectedPlace.image}
-						style={styles.placeImage}/>
+				<View style={styles.placeDetailContainer}>
+					<View style={styles.subContainer}>
+						<Image
+							source={this.props.selectedPlace.image}
+							style={styles.placeImage}/>
+					</View>
+					<View style={styles.subContainer}>
+						<MapView style={styles.map} initialRegion={{
+							...props.selectedPlace.location,
+							latitudeDelta: 0.012,
+							longitudeDelta: Dimensions.get('window').width / Dimensions.get('window').height * 0.012
+						}}>
+							<MapView.Marker coordinate={this.props.selectedPlace.location}/>
+						</MapView>
+					</View>
 				</View>
 				<View style={styles.subContainer}>
 					<View>
@@ -73,7 +81,7 @@ const styles = StyleSheet.create({
 	},
 	placeImage: {
 		width: '100%',
-		height: 200,
+		height: '100%',
 	},
 	placeName: {
 		fontWeight: 'bold',
@@ -85,6 +93,12 @@ const styles = StyleSheet.create({
 	},
 	subContainer: {
 		flex: 1
+	},
+	map: {
+		...StyleSheet.absoluteFillObject,
+	},
+	placeDetailContainer: {
+		flex: 2,
 	}
 });
 

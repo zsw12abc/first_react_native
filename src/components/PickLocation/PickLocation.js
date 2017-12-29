@@ -52,7 +52,7 @@ class PickLocation extends Component {
 			console.log(err);
 			alert("fail to get your location. Please do it manually")
 		})
-	}
+	};
 
 	render() {
 		let marker = null;
