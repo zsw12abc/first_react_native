@@ -3,6 +3,7 @@ import {Animated, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
 
 import PlaceList from '../../components/PlaceList/PlaceList';
+import {getPlaces} from "../../store/actions/index";
 
 class FindPlaceScreen extends Component {
 	static navigatorStyle = {
@@ -13,12 +14,6 @@ class FindPlaceScreen extends Component {
 		removeAnimation: new Animated.Value(1),
 		placesAnimation: new Animated.Value(0),
 	};
-
-	constructor(props) {
-		super(props);
-		this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
-	}
-
 	onNavigatorEvent = (event) => {
 		if (event.type === 'NavBarButtonPress') {
 			if (event.id === 'sideDrawerToggle') {
@@ -28,7 +23,6 @@ class FindPlaceScreen extends Component {
 			}
 		}
 	};
-
 	placesSearchHandler = () => {
 		Animated.timing(this.state.removeAnimation, {
 			toValue: 0,
@@ -41,7 +35,6 @@ class FindPlaceScreen extends Component {
 			this.placeLoadedHandler();
 		});
 	};
-
 	placeLoadedHandler = () => {
 		Animated.timing(this.state.placesAnimation, {
 			toValue: 1,
@@ -49,7 +42,6 @@ class FindPlaceScreen extends Component {
 			useNativeDriver: true
 		}).start();
 	};
-
 	itemSelectedHandler = key => {
 		const selPlace = this.props.places.find(place => {
 			return place.key === key;
@@ -62,6 +54,15 @@ class FindPlaceScreen extends Component {
 			}
 		});
 	};
+
+	constructor(props) {
+		super(props);
+		this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
+	}
+
+	componentDidMount() {
+		this.props.onLoadPlaces();
+	}
 
 	render() {
 		let content = (
@@ -126,4 +127,11 @@ const mapStateToProps = state => {
 		places: state.places.places,
 	};
 };
-export default connect(mapStateToProps)(FindPlaceScreen);
+
+const mapDispatchToProps = dispatch => {
+	return {
+		onLoadPlaces: () => dispatch(getPlaces())
+	}
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(FindPlaceScreen);
