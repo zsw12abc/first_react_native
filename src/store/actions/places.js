@@ -6,6 +6,16 @@ export const addPlace = (placeName, location, image) => {
             name: placeName,
             location: location
         };
+        fetch('https://us-central1-first-react-nati-1514367405118.cloudfunctions.net/storeImage', {
+            method: 'POST',
+            body: JSON.stringify({
+                image: image.base64
+            })
+        }).catch(err => console.log(err))
+            .then(res => res.json())
+            .then(parsedRes => {
+                console.log(parsedRes);
+            });
         fetch('https://first-react-nati-1514367405118.firebaseio.com/places.json', {
             method: 'POST',
             body: JSON.stringify(placeData)
@@ -13,7 +23,7 @@ export const addPlace = (placeName, location, image) => {
             .then(res => res.json())
             .then(parsedRes => {
                 console.log(parsedRes);
-            })
+            });
     }
 };
 
