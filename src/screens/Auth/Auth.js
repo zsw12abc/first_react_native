@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {
-	Dimensions, ImageBackground, Keyboard, KeyboardAvoidingView, StyleSheet, TouchableWithoutFeedback,
-	View
+	ActivityIndicator, Dimensions, ImageBackground, Keyboard, KeyboardAvoidingView, StyleSheet,
+	TouchableWithoutFeedback, View
 } from 'react-native';
 import {connect} from 'react-redux';
 import startMainTabs from '../MainTabs/startMainTabs';
@@ -44,34 +44,19 @@ class AuthScreen extends Component {
 			},
 		}
 	};
-
-	constructor(props) {
-		super(props);
-		Dimensions.addEventListener('change',
-			this.updateStyles);
-	}
-
-
-	componentWillUnmount() {
-		Dimensions.removeEventListener('change', this.updateStyles);
-	}
-
 	updateStyles = () => {
 		this.setState({
 			isPortrait: Dimensions.get('window').height > 500 ? 'portrait' : 'landscape'
 		});
 	};
-
-
 	loginHandler = () => {
 		const authData = {
 			email: this.state.controls.email.value,
 			password: this.state.controls.password.value,
 		};
 		this.props.onLogin(authData);
-		startMainTabs();
+		// startMainTabs();
 	};
-
 	switchAuthModeHandler = () => {
 		this.setState(prevState => {
 			return {
@@ -79,7 +64,6 @@ class AuthScreen extends Component {
 			};
 		});
 	};
-
 	updateInputState = (key, value) => {
 		let connectedValue = {};
 		if (this.state.controls[key].validationRules.equalTo) {
@@ -126,9 +110,27 @@ class AuthScreen extends Component {
 		});
 	};
 
+	constructor(props) {
+		super(props);
+		Dimensions.addEventListener('change',
+			this.updateStyles);
+	}
+
+	componentWillUnmount() {
+		Dimensions.removeEventListener('change', this.updateStyles);
+	}
+
 	render() {
 		let headingText = null;
 		let confirmPasswordControl = null;
+		let submitButton = (
+			<ButtonWithBackground
+				color={'#29aaf4'}
+				onPress={this.loginHandler}
+				disabled={!this.state.controls.confirmPassword.valid && this.state.authMode === 'signup' || !this.state.controls.email.valid || !this.state.controls.password.valid}>
+				Submit
+			</ButtonWithBackground>);
+
 		if (this.state.isPortrait === 'portrait') {
 			headingText = (
 				<MainText>
@@ -150,6 +152,10 @@ class AuthScreen extends Component {
 						secureTextEntry/>
 				</View>);
 		}
+		if (this.props.isLoading) {
+			submitButton = <ActivityIndicator/>
+		}
+
 		return (
 			<ImageBackground source={backgroundImage} style={styles.backgroundImage}>
 				<KeyboardAvoidingView style={styles.container} behavior={'padding'}>
@@ -188,12 +194,7 @@ class AuthScreen extends Component {
 							</View>
 						</View>
 					</TouchableWithoutFeedback>
-					<ButtonWithBackground
-						color={'#29aaf4'}
-						onPress={this.loginHandler}
-						disabled={!this.state.controls.confirmPassword.valid && this.state.authMode === 'signup' || !this.state.controls.email.valid || !this.state.controls.password.valid}>
-						Submit
-					</ButtonWithBackground>
+					{submitButton}
 				</KeyboardAvoidingView>
 			</ImageBackground>
 		);
@@ -233,6 +234,11 @@ const styles = StyleSheet.create({
 	}
 });
 
+const mapStateToProps = state => {
+	return {
+		isLoading: state.ui.isLoading
+	}
+};
 
 const mapDispatchToProps = dispatch => {
 	return {
@@ -240,4 +246,5 @@ const mapDispatchToProps = dispatch => {
 	};
 };
 
-export default connect(null, mapDispatchToProps)(AuthScreen);
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthScreen);
