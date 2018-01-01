@@ -4,7 +4,6 @@ import {
 	TouchableWithoutFeedback, View
 } from 'react-native';
 import {connect} from 'react-redux';
-import startMainTabs from '../MainTabs/startMainTabs';
 import DefaultInput from '../../components/UI/DefaultInput/DefaultInput';
 import HeadingText from '../../components/UI/HeadingText/HeadingText';
 import MainText from '../../components/UI/MainText/MainText';
@@ -49,12 +48,12 @@ class AuthScreen extends Component {
 			isPortrait: Dimensions.get('window').height > 500 ? 'portrait' : 'landscape'
 		});
 	};
-	loginHandler = () => {
+	authHandler = () => {
 		const authData = {
 			email: this.state.controls.email.value,
 			password: this.state.controls.password.value,
 		};
-		this.props.onLogin(authData);
+		this.props.onTryAuth(authData, this.state.authMode);
 		// startMainTabs();
 	};
 	switchAuthModeHandler = () => {
@@ -126,7 +125,7 @@ class AuthScreen extends Component {
 		let submitButton = (
 			<ButtonWithBackground
 				color={'#29aaf4'}
-				onPress={this.loginHandler}
+				onPress={this.authHandler}
 				disabled={!this.state.controls.confirmPassword.valid && this.state.authMode === 'signup' || !this.state.controls.email.valid || !this.state.controls.password.valid}>
 				Submit
 			</ButtonWithBackground>);
@@ -242,7 +241,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		onLogin: (authData) => dispatch(tryAuth(authData))
+		onTryAuth: (authData, authMode) => dispatch(tryAuth(authData, authMode))
 	};
 };
 
