@@ -3,18 +3,13 @@ import startMainTabs from '../../screens/MainTabs/startMainTabs'
 
 export const tryAuth = (authData, authMode) => {
 	return dispatch => {
-		if (authMode === 'login') {
-
-		} else {
-			dispatch(authSignup(authData));
-		}
-	}
-};
-
-export const authSignup = (authData) => {
-	return dispatch => {
 		dispatch(uiStartLoading());
-		fetch('https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyDPJWC318j4l8MtrWCNTOG2LCt3XmjX3uk', {
+		const apiKey = 'AIzaSyDPJWC318j4l8MtrWCNTOG2LCt3XmjX3uk';
+		let url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=' + apiKey;
+		if (authMode === 'signup') {
+			url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=' + apiKey;
+		}
+		fetch(url, {
 			method: 'POST',
 			body: JSON.stringify({
 				email: authData.email,
