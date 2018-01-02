@@ -1,19 +1,27 @@
 import {REMOVE_PLACE, SET_PLACES} from "./actionTypes";
 import {uiStartLoading, uiStopLoading} from "./index";
+import {authGetToken} from "./auth";
 
 export const addPlace = (placeName, location, image) => {
 	return dispatch => {
 		dispatch(uiStartLoading());
-		fetch('https://us-central1-first-react-nati-1514367405118.cloudfunctions.net/storeImage', {
-			method: 'POST',
-			body: JSON.stringify({
-				image: image.base64
+		dispatch(authGetToken())
+			.catch(() => {
+				alert('No valid token found!')
 			})
-		}).catch(err => {
-			console.log(err);
-			alert('Something went wrong, please try again!!');
-			dispatch(uiStopLoading());
-		})
+			.then(token => {
+				return fetch('https://us-central1-first-react-nati-1514367405118.cloudfunctions.net/storeImage', {
+					method: 'POST',
+					body: JSON.stringify({
+						image: image.base64
+					})
+				})
+			})
+			.catch(err => {
+				console.log(err);
+				alert('Something went wrong, please try again!!');
+				dispatch(uiStopLoading());
+			})
 			.then(res => res.json())
 			.then(parsedRes => {
 				const placeData = {
@@ -41,7 +49,13 @@ export const addPlace = (placeName, location, image) => {
 
 export const getPlaces = () => {
 	return dispatch => {
-		fetch('https://first-react-nati-1514367405118.firebaseio.com/places.json')
+		dispatch(authGetToken())
+			.catch(() => {
+				alert('No valid token found!')
+			})
+			.then(token => {
+				return fetch('https://first-react-nati-1514367405118.firebaseio.com/places.json?auth=' + token)
+			})
 			.then(res => res.json())
 			.then(parsedRes => {
 				const places = [];
@@ -72,10 +86,17 @@ export const setPlaces = places => {
 
 export const deletePlace = (key) => {
 	return dispatch => {
-		dispatch(removePlace(key));
-		fetch('https://first-react-nati-1514367405118.firebaseio.com/places/' + key + '.json', {
-			method: 'DELETE'
-		}).then(res => res.json())
+		dispatch(authGetToken())
+			.catch(() => {
+				alert('No valid token found!')
+			})
+			.then(token => {
+				dispatch(removePlace(key));
+				return fetch('https://first-react-nati-1514367405118.firebaseio.com/places/' + key + '.json?auth=' + token, {
+					method: 'DELETE'
+				})
+			})
+			.then(res => res.json())
 			.then(parsedRes => {
 				console.log("Delete Done");
 			})
