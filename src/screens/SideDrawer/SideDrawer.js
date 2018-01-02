@@ -44,8 +44,8 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = dispatch => {
 	return {
-		onLogout: () => dispatch(authLogout());
-}
+		onLogout: () => dispatch(authLogout())
+	}
 };
 
 export default connect(null, mapDispatchToProps)(SideDrawer);
