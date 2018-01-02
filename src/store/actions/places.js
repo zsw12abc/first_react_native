@@ -4,18 +4,24 @@ import {authGetToken} from "./auth";
 
 export const addPlace = (placeName, location, image) => {
 	return dispatch => {
+		let authToken;
 		dispatch(uiStartLoading());
 		dispatch(authGetToken())
 			.catch(() => {
 				alert('No valid token found!')
 			})
 			.then(token => {
+				authToken = token;
 				return fetch('https://us-central1-first-react-nati-1514367405118.cloudfunctions.net/storeImage', {
-					method: 'POST',
-					body: JSON.stringify({
-						image: image.base64
-					})
-				})
+						method: 'POST',
+						body: JSON.stringify({
+							image: image.base64
+						}),
+						headers: {
+							'Authorization': 'Bearer ' + token
+						}
+					}
+				);
 			})
 			.catch(err => {
 				console.log(err);
@@ -29,10 +35,12 @@ export const addPlace = (placeName, location, image) => {
 					location: location,
 					image: parsedRes.imageURL
 				};
-				return fetch('https://first-react-nati-1514367405118.firebaseio.com/places.json', {
-					method: 'POST',
-					body: JSON.stringify(placeData)
-				})
+				return fetch('https://first-react-nati-1514367405118.firebaseio.com/places.json?auth=' + authToken,
+					{
+						method: 'POST',
+						body: JSON.stringify(placeData)
+					}
+				);
 			})
 			.then(res => res.json())
 			.then(parsedRes => {
@@ -102,7 +110,7 @@ export const deletePlace = (key) => {
 			})
 			.catch(error => {
 				alert('Something went wrong.');
-				console.log(err);
+				console.log(error);
 			})
 	}
 };
