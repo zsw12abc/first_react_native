@@ -32,17 +32,20 @@ export const tryAuth = (authData, authMode) => {
 					alert('Authentication failed, please try again!');
 				} else {
 					console.log(parsedRes);
-					dispatch(authStoreToken(parsedRes.idToken))
+					dispatch(authStoreToken(parsedRes.idToken, parsedRes.expiresIn));
 					startMainTabs();
 				}
 			})
 	}
 };
 
-export const authStoreToken = token => {
+export const authStoreToken = (token, expiresIn) => {
 	return dispatch => {
 		dispatch(authSetToken(token));
+		const now = new Date();
+		const expireDate = now.getTime() + expiresIn * 1000;
 		AsyncStorage.setItem('ap:auth:token', token);
+		AsyncStorage.setItem('ap:auth:expiryDate', expireDate.toString());
 	}
 };
 
@@ -58,16 +61,27 @@ export const authGetToken = () => {
 		const promise = new Promise((resolve, reject) => {
 			const token = getState().auth.token;
 			if (!token) {
+				let fetchedToken;
 				AsyncStorage.getItem('ap:auth:token')
 					.catch(err => reject())
 					.then(tokenFromStorage => {
+						fetchedToken = tokenFromStorage;
 						if (!tokenFromStorage) {
 							reject();
 							return;
 						}
-						dispatch(authStoreToken(tokenFromStorage));
-						resolve(tokenFromStorage);
-					});
+						return AsyncStorage.getItem('ap:auth:expiryDate')
+					})
+					.then(expiryDate => {
+						const parsedExpiryDate = new Date(parseInt(expiryDate));
+						const now = new Date();
+						if (parsedExpiryDate > now) {
+							dispatch(authStoreToken(fetchedToken));
+							resolve(fetchedToken);
+						} else {
+							reject();
+						}
+					}).catch(err => reject());
 			} else {
 				resolve(token);
 			}
