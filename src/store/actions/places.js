@@ -1,4 +1,4 @@
-import {DELETE_PLACE, REMOVE_PLACE, SET_PLACES} from "./actionTypes";
+import {REMOVE_PLACE, SET_PLACES} from "./actionTypes";
 import {uiStartLoading, uiStopLoading} from "./index";
 
 export const addPlace = (placeName, location, image) => {
@@ -25,26 +25,23 @@ export const addPlace = (placeName, location, image) => {
 					method: 'POST',
 					body: JSON.stringify(placeData)
 				})
-			}).catch(err => {
-			console.log(err);
-			alert('Something went wrong, please try again!!');
-			dispatch(uiStopLoading());
-		})
+			})
 			.then(res => res.json())
 			.then(parsedRes => {
 				console.log(parsedRes);
 				dispatch(uiStopLoading());
-			});
+			})
+			.catch(err => {
+				console.log(err);
+				alert('Something went wrong, please try again!!');
+				dispatch(uiStopLoading());
+			})
 	}
 };
 
 export const getPlaces = () => {
 	return dispatch => {
 		fetch('https://first-react-nati-1514367405118.firebaseio.com/places.json')
-			.catch(error => {
-				alert('Something went wrong.');
-				console.log(err);
-			})
 			.then(res => res.json())
 			.then(parsedRes => {
 				const places = [];
@@ -58,6 +55,10 @@ export const getPlaces = () => {
 					})
 				}
 				dispatch(setPlaces(places))
+			})
+			.catch(err => {
+				alert('Something went wrong.');
+				console.log(err);
 			})
 	}
 };
@@ -74,13 +75,13 @@ export const deletePlace = (key) => {
 		dispatch(removePlace(key));
 		fetch('https://first-react-nati-1514367405118.firebaseio.com/places/' + key + '.json', {
 			method: 'DELETE'
-		}).catch(error => {
-			alert('Something went wrong.');
-			console.log(err);
-		})
-			.then(res => res.json())
+		}).then(res => res.json())
 			.then(parsedRes => {
 				console.log("Delete Done");
+			})
+			.catch(error => {
+				alert('Something went wrong.');
+				console.log(err);
 			})
 	}
 };
