@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {ActivityIndicator, Button, KeyboardAvoidingView, ScrollView, StyleSheet, View} from 'react-native';
 import {connect} from 'react-redux';
-import {addPlace} from "../../store/actions/index";
+import {addPlace, startAddPlace} from "../../store/actions/index";
 import PlaceInput from '../../components/PlaceInput/PlaceInput';
 import PickImage from '../../components/PickImage/PickImage';
 import PickLocation from '../../components/PickLocation/PickLocation';
@@ -34,8 +34,12 @@ class SharePlaceScreen extends Component {
 	// 		}
 	// 	}
 	// };
-
 	onNavigatorEvent = (event) => {
+		if (event.type === 'ScreenChangedEvent') {
+			if (event.id === 'willAppear') {
+				this.props.onStartAddPlace();
+			}
+		}
 		if (event.type === 'NavBarButtonPress') {
 			if (event.id === 'sideDrawerToggle') {
 				this.props.navigator.toggleDrawer({
@@ -68,6 +72,7 @@ class SharePlaceScreen extends Component {
 		this.reset();
 		this.imagePicker.reset();
 		this.locationPicker.reset();
+
 	};
 	locationPickedHandler = location => {
 		this.setState(prevState => {
@@ -82,7 +87,6 @@ class SharePlaceScreen extends Component {
 			}
 		})
 	};
-
 	imagePickedHandler = (image) => {
 		this.setState(prevState => {
 			return {
@@ -96,7 +100,6 @@ class SharePlaceScreen extends Component {
 			}
 		})
 	};
-
 	reset = () => {
 		this.setState({
 			controls: {
@@ -123,6 +126,13 @@ class SharePlaceScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		if (this.props.placeAdded) {
+			this.props.navigator.switchToTab({tabIndex: 0});
+			this.props.onStartAddPlace();
+		}
 	}
 
 	componentWillMount() {
@@ -189,13 +199,15 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
 	return {
-		isLoading: state.ui.isLoading
+		isLoading: state.ui.isLoading,
+		placeAdded: state.places.placeAdded
 	}
 };
 
 const mapDispatchToProps = dispatch => {
 	return {
 		onAddPlace: (placeName, location, image) => dispatch(addPlace(placeName, location, image)),
+		onStartAddPlace: () => dispatch(startAddPlace())
 	};
 };
 

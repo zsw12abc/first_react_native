@@ -1,4 +1,4 @@
-import {REMOVE_PLACE, SET_PLACES} from "./actionTypes";
+import {PLACE_ADDED, REMOVE_PLACE, SET_PLACES, START_ADD_PLACE} from "./actionTypes";
 import {uiStartLoading, uiStopLoading} from "./index";
 import {authGetToken} from "./auth";
 
@@ -51,7 +51,20 @@ export const addPlace = (placeName, location, image) => {
 				console.log(err);
 				alert('Something went wrong, please try again!!');
 				dispatch(uiStopLoading());
+				dispatch(placeAdded());
 			})
+	}
+};
+
+export const placeAdded = () => {
+	return {
+		type: PLACE_ADDED
+	}
+};
+
+export const startAddPlace = () => {
+	return {
+		type: START_ADD_PLACE
 	}
 };
 

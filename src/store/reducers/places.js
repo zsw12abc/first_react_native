@@ -1,9 +1,10 @@
 import React from 'react';
-import {ADD_PLACE, DELETE_PLACE, SET_PLACES} from "../actions/actionTypes";
+import {ADD_PLACE, DELETE_PLACE, PLACE_ADDED, SET_PLACES, START_ADD_PLACE} from "../actions/actionTypes";
 
 const initialState = {
 	places: [],
 	// selectedPlace: null
+	placeAdded: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -45,6 +46,16 @@ const reducer = (state = initialState, action) => {
 		// 		...state,
 		// 		selectedPlace: null,
 		// 	};
+		case PLACE_ADDED:
+			return {
+				...state,
+				placeAdded: true,
+			};
+		case START_ADD_PLACE:
+			return {
+				...state,
+				placeAdded: false
+			};
 		default:
 			return state;
 	}
