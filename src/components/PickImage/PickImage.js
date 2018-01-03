@@ -9,7 +9,7 @@ class PickImage extends Component {
 	};
 
 	pickImageHandler = () => {
-		ImagePicker.showImagePicker({title: 'Pick an Image'}, res => {
+		ImagePicker.showImagePicker({title: 'Pick an Image', maxWidth: 800, maxHeight: 600}, res => {
 			if (res.didCancel) {
 				console.log('User Cancelled!');
 			} else if (res.error) {
