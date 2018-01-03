@@ -15,6 +15,14 @@ class FindPlaceScreen extends Component {
 		placesAnimation: new Animated.Value(0),
 	};
 	onNavigatorEvent = (event) => {
+		if (event.type === 'ScreenChangedEvent') {
+			if (event.id === 'willAppear') {
+				this.props.onLoadPlaces();
+				// this.setState({
+				// 	placesLoaded: false
+				// })
+			}
+		}
 		if (event.type === 'NavBarButtonPress') {
 			if (event.id === 'sideDrawerToggle') {
 				this.props.navigator.toggleDrawer({
@@ -60,9 +68,6 @@ class FindPlaceScreen extends Component {
 		this.props.navigator.setOnNavigatorEvent(this.onNavigatorEvent);
 	}
 
-	componentDidMount() {
-		this.props.onLoadPlaces();
-	}
 
 	render() {
 		let content = (
